@@ -1,0 +1,2 @@
+Imported using 
+`svn2git http://svn.code.sf.net/p/jsoncpp/code --trunk=trunk/jsoncpp --nobranches --tags=tags/jsoncpp`
