@@ -15,6 +15,11 @@ IF(NOT WIN32)
     ENDIF(NOT CMAKE_BUILD_TYPE)
 ENDIF(NOT WIN32) 
 
+# Makes position-independent code to avoid link errors in 64 bit subsystems
+if("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "x86_64" AND NOT APPLE)
+        add_definitions(-fPIC)
+endif()
+
 # This ensures shared DLL are in the same dir as executable on Windows.
 # Put all executables / libraries are in a project global directory.
 SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib
