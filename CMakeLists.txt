@@ -22,10 +22,10 @@ ENDIF(NOT WIN32)
 
 IF( CMAKE_SIZEOF_VOID_P EQUAL 8 )
     SET(CMAKE_DEBUG_POSTFIX "-d64" CACHE STRING "Set debug 64bit library postfix" FORCE)
-    SET(CMAKE_RELEASE_POSTFIX "-r64" CACHE STRING "Set release 64bit library postfix" FORCE)
+    SET(CMAKE_RELEASE_POSTFIX "-64" CACHE STRING "Set release 64bit library postfix" FORCE)
 ELSE()
     SET(CMAKE_DEBUG_POSTFIX "-d32" CACHE STRING "Set debug 32bit library postfix" FORCE)
-    SET(CMAKE_RELEASE_POSTFIX "-r32" CACHE STRING "Set release 32bit library postfix" FORCE)
+    SET(CMAKE_RELEASE_POSTFIX "-32" CACHE STRING "Set release 32bit library postfix" FORCE)
 ENDIF()
 
 # This ensures shared DLL are in the same dir as executable on Windows.
