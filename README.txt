@@ -48,6 +48,9 @@ When running CMake, a few parameters are required:
   also used to store objects, libraries and executables files.
 - the generator to use: makefiles or Visual Studio solution? What version
   or Visual Studio, 32 or 64 bits solution? 
+
+> To build with Visual Studio for Win64 use like this: cmake "Visual Studio 11 Win64".
+> If you want static C++ runtime: cmake "Visual Studio 11 Win64" -DCPP_RUNTIME=STATIC
   
 Generating solution/makefiles using cmake-gui:
 - Makes "source code" points the source directory
