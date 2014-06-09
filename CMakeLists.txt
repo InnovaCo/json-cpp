@@ -21,11 +21,11 @@ IF(NOT WIN32)
 ENDIF(NOT WIN32) 
 
 IF( CMAKE_SIZEOF_VOID_P EQUAL 8 )
-    SET(CMAKE_DEBUG_POSTFIX "-d64" CACHE STRING "Set debug 64bit library postfix" FORCE)
-    SET(CMAKE_RELEASE_POSTFIX "-64" CACHE STRING "Set release 64bit library postfix" FORCE)
+    SET(CMAKE_DEBUG_POSTFIX "-d64")
+    SET(CMAKE_RELEASE_POSTFIX "-64")
 ELSE()
-    SET(CMAKE_DEBUG_POSTFIX "-d32" CACHE STRING "Set debug 32bit library postfix" FORCE)
-    SET(CMAKE_RELEASE_POSTFIX "-32" CACHE STRING "Set release 32bit library postfix" FORCE)
+    SET(CMAKE_DEBUG_POSTFIX "-d32")
+    SET(CMAKE_RELEASE_POSTFIX "-32")
 ENDIF()
 
 # This ensures shared DLL are in the same dir as executable on Windows.
@@ -36,6 +36,17 @@ SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib
     CACHE PATH "Single directory for all dynamic libraries on Unix.")
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin
     CACHE PATH "Single directory for all executable and dynamic libraries on Windows.")
+
+if(CMAKE_CONFIGURATION_TYPES)
+   # put targets into the bin and lib folders
+   foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
+        string( TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG )
+        set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${PROJECT_BINARY_DIR}/bin )
+        set( CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${PROJECT_BINARY_DIR}/lib )
+        set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${PROJECT_BINARY_DIR}/lib )
+    endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
+endif()
+
 MARK_AS_ADVANCED( CMAKE_RUNTIME_OUTPUT_DIRECTORY CMAKE_LIBRARY_OUTPUT_DIRECTORY CMAKE_ARCHIVE_OUTPUT_DIRECTORY )
 
 # Set variable named ${VAR_NAME} to value ${VALUE}
@@ -86,11 +97,23 @@ endmacro()
 # Include our configuration header
 INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/include )
 
-if ( MSVC )
+IF ( MSVC )
     # Only enabled in debug because some old versions of VS STL generate
     # unreachable code warning when compiled in release configuration.
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /W4 ")
-endif( MSVC )
+
+    # Unicode version for Windows
+    add_definitions(-DUNICODE -D_UNICODE)
+
+    # Allow to compile with static C++ runtime
+    IF("${CPP_RUNTIME}" STREQUAL "STATIC")
+    SET(CMAKE_DEBUG_POSTFIX "${CMAKE_DEBUG_POSTFIX}st")
+    SET(CMAKE_RELEASE_POSTFIX "${CMAKE_DEBUG_POSTFIX}st")
+
+    SET(CMAKE_CXX_FLAGS_RELEASE "/MT")
+    SET(CMAKE_CXX_FLAGS_DEBUG "/MTd")
+    ENDIF()
+ENDIF( MSVC )
 
 IF(JSONCPP_WITH_WARNING_AS_ERROR)
     UseCompilationWarningAsError()
