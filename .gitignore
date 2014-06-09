@@ -8,3 +8,30 @@
 bin/
 buildscons/
 libs/
+lib/
+
+# Visual Studio
+ALL_BUILD.vcxproj
+INSTALL.vcxproj
+RUN_TESTS.vcxproj
+ZERO_CHECK.vcxproj
+Win32/
+*.vcxproj.filters
+*.suo
+jsoncpp.sln
+src/jsontestrunner/jsoncpp_check.vcxproj
+src/jsontestrunner/jsoncpp_readerwriter_tests.vcxproj
+src/jsontestrunner/jsontestrunner_exe.dir/
+src/jsontestrunner/jsontestrunner_exe.vcxproj
+src/lib_json/jsoncpp_lib.dir/
+src/lib_json/jsoncpp_lib.vcxproj
+src/test_lib_json/jsoncpp_test.dir/
+src/test_lib_json/jsoncpp_test.vcxproj
+src/jsontestrunner/x64/
+x64/
+	
+# Cmake
+CMakeCache.txt
+CMakeFiles/
+CTestTestfile.cmake
+cmake_install.cmake

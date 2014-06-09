@@ -13,12 +13,20 @@ IF(NOT WIN32)
             "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel Coverage."
             FORCE)
     ENDIF(NOT CMAKE_BUILD_TYPE)
+
+    # Makes position-independent code to avoid link errors in 64 bit subsystems
+    IF("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "x86_64" AND NOT APPLE)
+            add_definitions(-fPIC)
+    ENDIF()
 ENDIF(NOT WIN32) 
 
-# Makes position-independent code to avoid link errors in 64 bit subsystems
-if("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "x86_64" AND NOT APPLE)
-        add_definitions(-fPIC)
-endif()
+IF( CMAKE_SIZEOF_VOID_P EQUAL 8 )
+    SET(CMAKE_DEBUG_POSTFIX "-d64" CACHE STRING "Set debug 64bit library postfix" FORCE)
+    SET(CMAKE_RELEASE_POSTFIX "-r64" CACHE STRING "Set release 64bit library postfix" FORCE)
+ELSE()
+    SET(CMAKE_DEBUG_POSTFIX "-d32" CACHE STRING "Set debug 32bit library postfix" FORCE)
+    SET(CMAKE_RELEASE_POSTFIX "-r32" CACHE STRING "Set release 32bit library postfix" FORCE)
+ENDIF()
 
 # This ensures shared DLL are in the same dir as executable on Windows.
 # Put all executables / libraries are in a project global directory.
